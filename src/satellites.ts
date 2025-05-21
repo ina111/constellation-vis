@@ -1,4 +1,5 @@
 import * as satellite from "satellite.js";
+import { CUSTOM_SATELLITES } from "./custom-satellites";
 
 /** Classical orbital elements used for defining a satellite. */
 export interface OrbitalElements {
@@ -71,7 +72,7 @@ export function toSatrec(spec: SatelliteSpec): satellite.SatRec {
 }
 
 /** List of satellites used by the demo. */
-export const SATELLITES: SatelliteSpec[] = [
+export const BUILTIN_SATELLITES: SatelliteSpec[] = [
   {
     type: "tle",
     lines: [
@@ -110,5 +111,10 @@ export const SATELLITES: SatelliteSpec[] = [
       meanAnomalyDeg: 0,
     },
   },
+];
+
+export const SATELLITES: SatelliteSpec[] = [
+  ...BUILTIN_SATELLITES,
+  ...CUSTOM_SATELLITES,
 ];
 

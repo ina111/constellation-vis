@@ -1,0 +1,9 @@
+[[satellite]]
+satnum = 90001
+epoch = "2025-05-20T00:00:00Z"
+semiMajorAxisKm = 7000
+eccentricity = 0.001
+inclinationDeg = 40
+raanDeg = 0
+argPerigeeDeg = 0
+meanAnomalyDeg = 0

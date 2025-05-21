@@ -37,6 +37,18 @@ npm run dev
 
 Open your browser and visit `http://localhost:5173`.
 
+### Custom satellites from TOML
+
+You can define additional satellites in `satellites.toml` using orbital
+elements. After editing the file, run:
+
+```bash
+bun run generate
+```
+
+This converts `satellites.toml` into `src/custom-satellites.ts`, which the app
+loads automatically.
+
 
 ## Deployment
 https://constellation-vis-919f.vercel.app/
