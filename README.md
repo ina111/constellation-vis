@@ -38,5 +38,26 @@ npm run dev
 Open your browser and visit `http://localhost:5173`.
 
 
+## Satellite data
+
+Satellite information is loaded from `public/satellites.toml` and
+`public/constellation.toml` when running the build scripts.  The latter can
+define a constellation using Walker-Δ style parameters:
+
+```toml
+[constellation]
+name  = "ExampleConstellation"
+epoch = "2025-05-22T00:00:00Z"
+
+[[constellation.shells]]
+count       = 66
+planes      = 6
+phasing     = 2
+apogee_altitude = 550
+eccentricity = 0.0001
+inclination  = 53.0
+```
+
+
 ## Deployment
 https://constellation-vis-919f.vercel.app/
