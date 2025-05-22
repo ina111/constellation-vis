@@ -3,6 +3,25 @@ import * as satellite from "satellite.js";
 
 const DEG2RAD = Math.PI / 180;
 
+export function greenwichSiderealAngle(date: Date): number {
+  const jd = satellite.jday(
+    date.getUTCFullYear(),
+    date.getUTCMonth() + 1,
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds() + date.getUTCMilliseconds() / 1000,
+  );
+  const T = (jd - 2451545.0) / 36525.0;
+  let gmst =
+    280.46061837 +
+    360.98564736629 * (jd - 2451545.0) +
+    0.000387933 * T * T -
+    (T * T * T) / 38710000;
+  gmst = ((gmst % 360) + 360) % 360;
+  return gmst * DEG2RAD;
+}
+
 export function sunVectorECI(date: Date): { x: number; y: number; z: number } {
   const jd = satellite.jday(
     date.getUTCFullYear(),
