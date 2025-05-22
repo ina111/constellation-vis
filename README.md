@@ -8,7 +8,8 @@ A minimal web application to visualize Earth and satellites in orbit in real tim
 - Visualize satellite positions and ground tracks from TLE data.
 - Adjustable simulation speed (1×–100× real time) via slider.
 - Interactive orbit controls for zooming, rotating, and panning.
-- Display current simulated UTC date and time.
+- Display current simulated UTC and JST date and time.
+- Correct Earth orientation using Greenwich sidereal time.
 - Responsive viewport that adjusts on window resize.
 
 ## Prerequisites
