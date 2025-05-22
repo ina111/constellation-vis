@@ -3,10 +3,14 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as satellite from "satellite.js";
 import { SATELLITES, toSatrec } from "../satellites";
-import { sunVectorECI, createGraticule, createEclipticLine } from "../utils/sceneHelpers";
+import {
+  sunVectorECI,
+  createGraticule,
+  createEclipticLine,
+  greenwichSiderealAngle,
+} from "../utils/sceneHelpers";
 
 const EARTH_RADIUS_KM = 6371;
-const SIDEREAL_DAY_SEC = 86164;
 
 interface Params {
   mountRef: React.RefObject<HTMLDivElement | null>;
@@ -43,6 +47,9 @@ export function useSatelliteScene({ mountRef, timeRef, speedRef }: Params) {
 
     const earthGeometry = new THREE.SphereGeometry(1, 128, 128);
     const texture = new THREE.TextureLoader().load("/assets/earth_daymap.jpg");
+    texture.flipY = false;
+    texture.center.set(0.5, 0.5);
+    texture.rotation = Math.PI;
     const earthMaterial = new THREE.MeshPhongMaterial({ map: texture, shininess: 1 });
     const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
     scene.add(earthMesh);
@@ -71,8 +78,16 @@ export function useSatelliteScene({ mountRef, timeRef, speedRef }: Params) {
 
     const startReal = Date.now();
     const pad = (n: number) => n.toString().padStart(2, "0");
-    const fmt = (d: Date) =>
-      `${d.getFullYear()}年${pad(d.getMonth() + 1)}月${pad(d.getDate())}日${pad(d.getHours())}時${pad(d.getMinutes())}分`;
+    const fmtUtc = (d: Date) =>
+      `UTC: ${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())} ` +
+      `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`;
+    const fmtJst = (d: Date) => {
+      const jst = new Date(d.getTime() + 9 * 3600 * 1000);
+      return (
+        `JST: ${jst.getUTCFullYear()}-${pad(jst.getUTCMonth() + 1)}-${pad(jst.getUTCDate())} ` +
+        `${pad(jst.getUTCHours())}:${pad(jst.getUTCMinutes())}`
+      );
+    };
 
     function animate() {
       requestAnimationFrame(animate);
@@ -80,9 +95,9 @@ export function useSatelliteScene({ mountRef, timeRef, speedRef }: Params) {
       const simDeltaMs = (nowReal - startReal) * speedRef.current;
       const simDate = new Date(startReal + simDeltaMs);
 
-      const rotAngle = ((2 * Math.PI) / SIDEREAL_DAY_SEC) * (simDeltaMs / 1000);
-      earthMesh.rotation.y = rotAngle;
-      graticule.rotation.y = rotAngle;
+      const gsa = greenwichSiderealAngle(simDate);
+      earthMesh.rotation.y = gsa;
+      graticule.rotation.y = gsa;
 
       const sun = sunVectorECI(simDate);
       sunlight.position.set(sun.x * 10, sun.z * 10, -sun.y * 10);
@@ -102,7 +117,8 @@ export function useSatelliteScene({ mountRef, timeRef, speedRef }: Params) {
         }
       });
 
-      if (timeRef.current) timeRef.current.textContent = fmt(simDate);
+      if (timeRef.current)
+        timeRef.current.textContent = `${fmtUtc(simDate)}\n${fmtJst(simDate)}`;
 
       controls.update();
       renderer.render(scene, camera);

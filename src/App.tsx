@@ -30,6 +30,7 @@ function App() {
           fontFamily: "'Noto Sans Mono', monospace",
           fontVariantNumeric: "tabular-nums",
           fontSize: "0.9rem",
+          whiteSpace: "pre",
           pointerEvents: "none",
           zIndex: 10,
         }}

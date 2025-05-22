@@ -25,6 +25,25 @@ export function sunVectorECI(date: Date): { x: number; y: number; z: number } {
   return { x: xs, y: ys, z: zs };
 }
 
+export function greenwichSiderealAngle(date: Date): number {
+  const jd = satellite.jday(
+    date.getUTCFullYear(),
+    date.getUTCMonth() + 1,
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds() + date.getUTCMilliseconds() / 1000,
+  );
+  const T = (jd - 2451545.0) / 36525.0;
+  let gmst =
+    280.46061837 +
+    360.98564736629 * (jd - 2451545.0) +
+    0.000387933 * T * T -
+    (T * T * T) / 38710000;
+  gmst = ((gmst % 360) + 360) % 360;
+  return gmst * DEG2RAD;
+}
+
 export function createGraticule(stepDeg = 20): THREE.LineSegments {
   const vertices: number[] = [];
   const material = new THREE.LineBasicMaterial({ color: 0xdcdcdc, linewidth: 0.1 });
