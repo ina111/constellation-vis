@@ -18,6 +18,7 @@ interface Params {
   mountRef: React.RefObject<HTMLDivElement | null>;
   timeRef: React.RefObject<HTMLDivElement | null>;
   speedRef: React.MutableRefObject<number>;
+  startTimeMs: number;
   satellites: SatelliteSpec[];
   groundStations: GroundStation[];
 }
@@ -31,6 +32,7 @@ export function useSatelliteScene({
   mountRef,
   timeRef,
   speedRef,
+  startTimeMs,
   satellites,
   groundStations,
 }: Params) {
@@ -148,7 +150,7 @@ export function useSatelliteScene({
       requestAnimationFrame(animate);
       const nowReal = Date.now();
       const simDeltaMs = (nowReal - startReal) * speedRef.current;
-      const simDate = new Date(startReal + simDeltaMs);
+      const simDate = new Date(startTimeMs + simDeltaMs);
 
       // Rotate Earth using sidereal time
       const rotAngle = satellite.gstime(simDate)
@@ -238,5 +240,5 @@ export function useSatelliteScene({
         mountNode.removeChild(renderer.domElement);
       }
     };
-  }, [mountRef, timeRef, speedRef, satellites, groundStations]);
+  }, [mountRef, timeRef, speedRef, satellites, groundStations, startTimeMs]);
 }

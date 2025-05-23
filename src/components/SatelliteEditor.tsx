@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react";
+
+const pad = (n: number) => n.toString().padStart(2, "0");
+const formatForInput = (d: Date) =>
+  `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 import type { SatelliteSpec } from "../satellites";
 import type { GroundStation } from "../groundStations";
 import {
@@ -9,13 +13,20 @@ import {
 
 interface Props {
   onUpdate: (sats: SatelliteSpec[], stations: GroundStation[]) => void;
+  startTime: Date;
+  onStartTimeChange: (date: Date) => void;
 }
 
-export default function SatelliteEditor({ onUpdate }: Props) {
+export default function SatelliteEditor({ onUpdate, startTime, onStartTimeChange }: Props) {
   const [satText, setSatText] = useState("");
   const [constText, setConstText] = useState("");
   const [gsText, setGsText] = useState("");
   const [open, setOpen] = useState(false);
+  const [startStr, setStartStr] = useState(formatForInput(startTime));
+
+  useEffect(() => {
+    setStartStr(formatForInput(startTime));
+  }, [startTime]);
 
   useEffect(() => {
     fetch("/satellites.toml")
@@ -94,6 +105,25 @@ export default function SatelliteEditor({ onUpdate }: Props) {
         >
           ✕
         </button>
+        <div style={{ paddingTop: 24 }}>
+          <div>Start time (local)</div>
+          <div style={{ display: "flex", gap: 4 }}>
+            <input
+              type="datetime-local"
+              value={startStr}
+              onChange={(e) => setStartStr(e.target.value)}
+              style={{ width: "100%" }}
+            />
+            <button
+              onClick={() => {
+                const d = new Date(startStr);
+                if (!isNaN(d.getTime())) onStartTimeChange(d);
+              }}
+            >
+              Set
+            </button>
+          </div>
+        </div>
         <div style={{ paddingTop: 24 }}>
           <div>satellites.toml</div>
           <textarea
