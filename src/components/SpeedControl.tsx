@@ -1,8 +1,10 @@
+// Slider used to control simulation speed
 interface Props {
   value: number;
   onChange: (value: number) => void;
 }
 
+/** UI control to change simulation speed */
 export default function SpeedControl({ value, onChange }: Props) {
   return (
     <div

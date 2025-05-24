@@ -1,3 +1,4 @@
+// Application entry component rendering the 3D scene and UI
 import { useRef, useEffect, useState } from "react";
 import SpeedControl from "./components/SpeedControl";
 import SatelliteEditor from "./components/SatelliteEditor";
@@ -5,8 +6,10 @@ import { useSatelliteScene } from "./hooks/useSatelliteScene";
 import { SATELLITES as INITIAL_SATS } from "./satellites";
 import { loadGroundStations, type GroundStation } from "./groundStations";
 
+// Simulation speed multiplier (in real-time scale)
 const INITIAL_SPEED = 60; // initial 60× real time
 
+/** Main React component */
 function App() {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const timeRef = useRef<HTMLDivElement | null>(null);
@@ -41,6 +44,7 @@ function App() {
     onSelect: setSelectedIdx,
   });
 
+  // Render information about the selected satellite
   function formatInfo(idx: number | null): string {
     if (idx === null) return "";
     const spec = satellites[idx];

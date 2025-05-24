@@ -1,3 +1,4 @@
+// Sidebar UI allowing import and editing of TOML files
 import { useEffect, useRef, useState } from "react";
 import type { SatelliteSpec } from "../satellites";
 import type { GroundStation } from "../groundStations";
@@ -19,6 +20,7 @@ const CELESTRACK_GROUPS = [
 
 const MU = 398600.4418; // km^3/s^2
 
+// Entry format used by CelesTrak JSON API
 interface CelestrakEntry {
   MEAN_MOTION: number;
   ECCENTRICITY: number;
@@ -49,6 +51,7 @@ function celestrakEntryToSat(entry: CelestrakEntry): SatelliteSpec {
   };
 }
 
+// Helper to serialize satellite specs back to TOML
 function satellitesToToml(list: SatelliteSpec[]): string {
   return list
     .map((s) => {
@@ -77,6 +80,7 @@ function satellitesToToml(list: SatelliteSpec[]): string {
     .join("\n\n");
 }
 
+// Callback to update satellites and stations from editor
 interface Props {
   onUpdate: (
     sats: SatelliteSpec[],
@@ -85,6 +89,7 @@ interface Props {
   ) => void;
 }
 
+/** Sidebar component for editing satellites and stations */
 export default function SatelliteEditor({ onUpdate }: Props) {
   const [satText, setSatText] = useState("");
   const [constText, setConstText] = useState("");

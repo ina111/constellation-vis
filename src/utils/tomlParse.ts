@@ -1,7 +1,8 @@
-// Utility to parse minimal TOML used for satellites and constellations
+// Utility helpers to parse minimal TOML used for satellites and constellations
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { SatelliteSpec } from "../satellites";
 
+// Very small parser for primitive TOML values
 function parseValue(v: string): any {
   const s = v.trim();
   if (s.startsWith('"') && s.endsWith('"')) return s.slice(1, -1);

@@ -1,3 +1,4 @@
+// Helper functions used by the Three.js scene
 import * as THREE from "three";
 import { jday } from "satellite.js";
 

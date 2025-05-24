@@ -1,3 +1,4 @@
+// Utilities and types for satellite definitions
 import * as satellite from "satellite.js";
 
 /** Classical orbital elements used for defining a satellite. */
@@ -62,6 +63,7 @@ function elementsToTle(el: OrbitalElements): [string, string] {
 }
 
 /** Convert a satellite specification to a `satellite.js` satrec. */
+// Convert satellite specification to satellite.js structure
 export function toSatrec(spec: SatelliteSpec): satellite.SatRec {
   if (spec.type === "tle") {
     return satellite.twoline2satrec(spec.lines[0], spec.lines[1]);
@@ -72,6 +74,8 @@ export function toSatrec(spec: SatelliteSpec): satellite.SatRec {
 
 /** List of satellites used by the demo. */
 import satellites from "./satellites.generated";
+
+// Pre-generated set of satellites bundled with the demo
 
 export const SATELLITES: SatelliteSpec[] = satellites;
 
