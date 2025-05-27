@@ -9,7 +9,8 @@
     "prebuild": "bun scripts/generate-satellites.ts",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "report": "bun scripts/generate-visibility-report.ts"
   },
   "dependencies": {
     "react": "^19.1.0",
