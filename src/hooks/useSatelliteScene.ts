@@ -175,19 +175,26 @@ export function useSatelliteScene({
     let selectedIndex: number | null = null;
     let selectedStationIndex: number | null = null;
     let orbitLine: THREE.Line | null = null;
+    let groundTrackLine: THREE.Line | null = null;
     let currentSimDate = startTime;
 
-    // When a satellite is selected, draw lines showing two full orbits
-    // starting from the current simulation time.
+    // When a satellite is selected, draw lines showing two full orbits and the
+    // corresponding ground track starting from the current simulation time.
     function updateTrack() {
       if (orbitLine) {
         orbitLine.geometry.dispose();
         scene.remove(orbitLine);
         orbitLine = null;
       }
+      if (groundTrackLine) {
+        groundTrackLine.geometry.dispose();
+        scene.remove(groundTrackLine);
+        groundTrackLine = null;
+      }
       if (selectedIndex === null) return;
       const rec = satRecs[selectedIndex];
-      const points: THREE.Vector3[] = [];
+      const orbitPts: THREE.Vector3[] = [];
+      const groundPts: THREE.Vector3[] = [];
       const periodMinutes = (2 * Math.PI) / rec.no; // minutes per orbit
       const trackMinutes = Math.round(periodMinutes * 2); // two orbits
       for (let m = 0; m <= trackMinutes; m += 1) {
@@ -195,19 +202,34 @@ export function useSatelliteScene({
         const pv = satellite.propagate(rec, d);
         if (pv?.position) {
           const { x, y, z } = pv.position;
-          points.push(
+          orbitPts.push(
             new THREE.Vector3(
               x / EARTH_RADIUS_KM,
               z / EARTH_RADIUS_KM,
               -y / EARTH_RADIUS_KM,
             ),
           );
+          const gmst = satellite.gstime(d);
+          const gd = satellite.eciToGeodetic(pv.position, gmst);
+          const cosLat = Math.cos(gd.latitude);
+          groundPts.push(
+            new THREE.Vector3(
+              cosLat * Math.cos(gd.longitude),
+              Math.sin(gd.latitude),
+              -cosLat * Math.sin(gd.longitude),
+            ),
+          );
         }
       }
-      const geom = new THREE.BufferGeometry().setFromPoints(points);
-      const mat = new THREE.LineBasicMaterial({ color: 0xffffff });
-      orbitLine = new THREE.Line(geom, mat);
+      const orbitGeom = new THREE.BufferGeometry().setFromPoints(orbitPts);
+      const orbitMat = new THREE.LineBasicMaterial({ color: 0xffffff });
+      orbitLine = new THREE.Line(orbitGeom, orbitMat);
       scene.add(orbitLine);
+
+      const groundGeom = new THREE.BufferGeometry().setFromPoints(groundPts);
+      const groundMat = new THREE.LineBasicMaterial({ color: 0xaaaaaa });
+      groundTrackLine = new THREE.Line(groundGeom, groundMat);
+      scene.add(groundTrackLine);
     }
 
     // Check if a ground station or satellite was clicked/tapped and update selection state.
@@ -367,7 +389,12 @@ export function useSatelliteScene({
       window.removeEventListener("resize", handleResize);
       renderer.domElement.removeEventListener('pointerdown', handlePointer);
       if (orbitLine) {
+        scene.remove(orbitLine);
         orbitLine.geometry.dispose();
+      }
+      if (groundTrackLine) {
+        scene.remove(groundTrackLine);
+        groundTrackLine.geometry.dispose();
       }
       renderer.dispose();
       satGeometry.dispose();
