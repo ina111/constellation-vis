@@ -9,6 +9,7 @@ import {
   sunVectorECI,
   createGraticule,
   createEclipticLine,
+  createTerminatorMesh,
 } from "../utils/sceneHelpers";
 
 /** Radius of Earth in kilometres, used to normalise coordinates. */
@@ -29,6 +30,8 @@ interface Params {
   showEcliptic: boolean;
   /** Show or hide sun direction marker */
   showSunDirection: boolean;
+  /** Show or hide night-side terminator */
+  showTerminator: boolean;
   onSelect?: (idx: number | null) => void;
   onSelectStation?: (idx: number | null) => void;
   stationInfoRef?: React.RefObject<HTMLPreElement | null>;
@@ -51,6 +54,7 @@ export function useSatelliteScene({
   showGraticule,
   showEcliptic,
   showSunDirection,
+  showTerminator,
   onSelect,
   onSelectStation,
   stationInfoRef,
@@ -74,6 +78,7 @@ export function useSatelliteScene({
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.localClippingEnabled = true;
     mountNode.appendChild(renderer.domElement);
 
     // Camera controls
@@ -102,6 +107,10 @@ export function useSatelliteScene({
     const ecliptic = createEclipticLine(1);
     ecliptic.visible = showEcliptic;
     scene.add(ecliptic);
+
+    const { mesh: terminator, plane: terminatorPlane } = createTerminatorMesh();
+    terminator.visible = showTerminator;
+    scene.add(terminator);
 
     // Small marker for the sun position
     const sunDotGeo = new THREE.SphereGeometry(0.01, 8, 8);
@@ -282,6 +291,7 @@ export function useSatelliteScene({
       const { x: sx, y: sy, z: sz } = sunVectorECI(simDate);
       sunlight.position.set(sx * 10, sz * 10, -sy * 10);
       sunDot.position.set(sx, sz, -sy);
+      terminatorPlane.normal.set(sx, sz, -sy).normalize();
 
       const gmst = rotAngle;
       const gsEcis = observerGds.map((gd) => {
@@ -372,6 +382,7 @@ export function useSatelliteScene({
       renderer.dispose();
       satGeometry.dispose();
       groundGeometry.dispose();
+      terminator.geometry.dispose();
       if (mountNode.contains(renderer.domElement)) {
         mountNode.removeChild(renderer.domElement);
       }
@@ -388,6 +399,7 @@ export function useSatelliteScene({
     showGraticule,
     showEcliptic,
     showSunDirection,
+    showTerminator,
     onSelect,
     onSelectStation,
     stationInfoRef,

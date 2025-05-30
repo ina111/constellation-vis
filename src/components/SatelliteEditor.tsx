@@ -144,6 +144,10 @@ interface Props {
   showSunDirection: boolean;
   /** Called when sun direction visibility changes */
   onShowSunDirectionChange: (v: boolean) => void;
+  /** Show or hide terminator */
+  showTerminator: boolean;
+  /** Called when terminator visibility changes */
+  onShowTerminatorChange: (v: boolean) => void;
 }
 
 export default function SatelliteEditor({
@@ -158,6 +162,8 @@ export default function SatelliteEditor({
   onShowEclipticChange,
   showSunDirection,
   onShowSunDirectionChange,
+  showTerminator,
+  onShowTerminatorChange,
 }: Props) {
   const [satText, setSatText] = useState("");
   const [constText, setConstText] = useState("");
@@ -626,6 +632,18 @@ export default function SatelliteEditor({
                     }
                   />
                   <span style={{ marginLeft: 4 }}>Show sun direction</span>
+                </label>
+              </div>
+              <div style={{ marginTop: 4 }}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={showTerminator}
+                    onChange={(e) =>
+                      onShowTerminatorChange(e.target.checked)
+                    }
+                  />
+                  <span style={{ marginLeft: 4 }}>Show terminator</span>
                 </label>
               </div>
               <hr style={{ marginTop: 12, marginBottom: 12 }} />

@@ -108,3 +108,25 @@ export function createEclipticLine(stepDeg = 2): THREE.Line {
   const material = new THREE.LineBasicMaterial({ color: 0xffff00, transparent: true, opacity: 0.4 });
   return new THREE.Line(geometry, material);
 }
+
+/**
+ * Create a semi-transparent mesh representing the night side of the Earth. It
+ * uses a sphere clipped by a plane passing through the origin. The plane's
+ * normal should point toward the sun and is returned so callers can update it
+ * each frame.
+ */
+export function createTerminatorMesh(): {
+  mesh: THREE.Mesh;
+  plane: THREE.Plane;
+} {
+  const geometry = new THREE.SphereGeometry(1.01, 64, 64);
+  const plane = new THREE.Plane(new THREE.Vector3(1, 0, 0), 0);
+  const material = new THREE.MeshBasicMaterial({
+    color: 0x000000,
+    transparent: true,
+    opacity: 0.4,
+    side: THREE.BackSide,
+    clippingPlanes: [plane],
+  });
+  return { mesh: new THREE.Mesh(geometry, material), plane };
+}
