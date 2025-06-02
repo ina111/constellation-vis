@@ -24,17 +24,17 @@ export default function SpeedControl({ value, onChange }: Props) {
     <div className="speed-control">
       <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         <span style={{ fontSize: '0.9em' }}>Speed:</span>
-        <select 
-          value={selectedSpeed} 
+        <select
+          value={selectedSpeed}
           onChange={handleChange}
           style={{
-            background: 'rgba(30, 32, 36, 0.9)',
-            color: '#f1f1f1',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
+            background: 'var(--panel-bg)',
+            color: 'var(--text-color)',
+            border: '1px solid var(--color-gray)',
             borderRadius: '4px',
             padding: '4px 8px',
             fontSize: '0.9em',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           {SPEED_OPTIONS.map(speed => (

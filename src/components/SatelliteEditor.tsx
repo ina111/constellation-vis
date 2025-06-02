@@ -421,28 +421,28 @@ export default function SatelliteEditor({
                   <div style={{ display: "flex", gap: 2 }}>
                     <button
                       onClick={() => downloadFile("satellites.toml", satText)}
-                      style={{ background: "transparent", border: "none", color: "#fff", padding: "2px 6px", fontSize: "0.9em" }}
+                      style={{ background: "transparent", border: "none", color: "var(--color-white)", padding: "2px 6px", fontSize: "0.9em" }}
                       title="Download"
                     >
                       💾
                     </button>
                     <button
                       onClick={() => satInputRef.current?.click()}
-                      style={{ background: "transparent", border: "none", color: "#fff", padding: "2px 6px", fontSize: "0.9em" }}
+                      style={{ background: "transparent", border: "none", color: "var(--color-white)", padding: "2px 6px", fontSize: "0.9em" }}
                       title="Open file"
                     >
                       📂
                     </button>
                     <button
                       onClick={() => setSatText("")}
-                      style={{ background: "transparent", border: "none", color: "#fff", padding: "2px 6px", fontSize: "0.9em" }}
+                      style={{ background: "transparent", border: "none", color: "var(--color-white)", padding: "2px 6px", fontSize: "0.9em" }}
                       title="Clear"
                     >
                       🗑️
                     </button>
                     <button
                       onClick={() => setImportOpen(true)}
-                      style={{ background: "transparent", border: "none", color: "#fff", padding: "2px 6px", fontSize: "0.9em" }}
+                      style={{ background: "transparent", border: "none", color: "var(--color-white)", padding: "2px 6px", fontSize: "0.9em" }}
                       title="Import from CelesTrak"
                     >
                       🌐
@@ -474,21 +474,21 @@ export default function SatelliteEditor({
                   <div style={{ display: "flex", gap: 2 }}>
                     <button
                       onClick={() => downloadFile("constellation.toml", constText)}
-                      style={{ background: "transparent", border: "none", color: "#fff", padding: "2px 6px", fontSize: "0.9em" }}
+                      style={{ background: "transparent", border: "none", color: "var(--color-white)", padding: "2px 6px", fontSize: "0.9em" }}
                       title="Download"
                     >
                       💾
                     </button>
                     <button
                       onClick={() => constInputRef.current?.click()}
-                      style={{ background: "transparent", border: "none", color: "#fff", padding: "2px 6px", fontSize: "0.9em" }}
+                      style={{ background: "transparent", border: "none", color: "var(--color-white)", padding: "2px 6px", fontSize: "0.9em" }}
                       title="Open file"
                     >
                       📂
                     </button>
                     <button
                       onClick={() => setConstText("")}
-                      style={{ background: "transparent", border: "none", color: "#fff", padding: "2px 6px", fontSize: "0.9em" }}
+                      style={{ background: "transparent", border: "none", color: "var(--color-white)", padding: "2px 6px", fontSize: "0.9em" }}
                       title="Clear"
                     >
                       🗑️
@@ -519,21 +519,21 @@ export default function SatelliteEditor({
                   <div style={{ display: "flex", gap: 2 }}>
                     <button
                       onClick={() => downloadFile("groundstations.toml", gsText)}
-                      style={{ background: "transparent", border: "none", color: "#fff", padding: "2px 6px", fontSize: "0.9em" }}
+                      style={{ background: "transparent", border: "none", color: "var(--color-white)", padding: "2px 6px", fontSize: "0.9em" }}
                       title="Download"
                     >
                       💾
                     </button>
                     <button
                       onClick={() => gsInputRef.current?.click()}
-                      style={{ background: "transparent", border: "none", color: "#fff", padding: "2px 6px", fontSize: "0.9em" }}
+                      style={{ background: "transparent", border: "none", color: "var(--color-white)", padding: "2px 6px", fontSize: "0.9em" }}
                       title="Open file"
                     >
                       📂
                     </button>
                     <button
                       onClick={() => setGsText("")}
-                      style={{ background: "transparent", border: "none", color: "#fff", padding: "2px 6px", fontSize: "0.9em" }}
+                      style={{ background: "transparent", border: "none", color: "var(--color-white)", padding: "2px 6px", fontSize: "0.9em" }}
                       title="Clear"
                     >
                       🗑️
